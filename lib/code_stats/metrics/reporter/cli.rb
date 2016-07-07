@@ -1,4 +1,3 @@
-require 's3_uploader'
 require 'httparty'
 
 module CodeStats
@@ -22,10 +21,9 @@ module CodeStats
             puts "Sending #{metric_config.data['name']} data"
           end
           return 0
-        # rescue Exception => e
-          # stderr = StringIO.new
-          # stderr.puts e.message
-          # stderr.puts e.backtrace
+        rescue Exception => e
+          puts e.message
+          puts e.backtrace
           return 2
         end
 
@@ -33,7 +31,7 @@ module CodeStats
           HTTParty.post(
             "#{config_store.url}api/v1/metrics",
             body: metric_data(data),
-            headers: { 'Authorization' => config_store.token }
+            headers: { 'Authorization' => config_store.token.to_s }
           )
         end
 
