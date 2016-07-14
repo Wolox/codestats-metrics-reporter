@@ -17,11 +17,12 @@ module CodeStats
               branch:           ENV['CIRCLE_BRANCH'],
               repository_name:  ENV['CIRCLE_PROJECT_REPONAME']
             }
-          elsif service == 'JENKINS_URL'
+          elsif service == 'JENKINS'
             {
               name:             'jenkins',
               build_identifier: ENV['BUILD_NUMBER'],
-              branch:           ENV['GIT_BRANCH']
+              branch:           ENV['ghprbSourceBranch'],
+              repository_name:  ENV['JOB_NAME']
             }
           else
             {}
