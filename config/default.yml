@@ -5,7 +5,7 @@ config:
 metrics:
   rubycritic:
     name: 'RubyCritic'
-    enabled: true
+    enabled: false
     minimum: 70
     report_dir: 'tmp/rubycritic'
     uploader_key: <%= ENV['RUBYCRITIC_S3_KEY'] %>
@@ -14,5 +14,5 @@ metrics:
     uploader_bucket: <%= ENV['RUBYCRITIC_S3_BUCKET'] %>
   simplecov:
     name: 'SimpleCov'
-    enabled: true
+    enabled: false
     minimum: 70
