@@ -39,20 +39,18 @@ module CodeStats
 
           def load_default_metrics_configs(metrics)
             metrics.each do |metric, metric_data|
-              if metric_data['enabled'] == true
-                @default_data[:metrics_configs] << MetricConfig.new(
-                  metric_data.merge('metric' => metric)
-                )
-              end
+              @default_data[:metrics_configs] << MetricConfig.new(
+                metric_data.merge('metric' => metric)
+              )
             end
           end
 
           def load_user_metrics_configs(metrics)
             @default_data[:metrics_configs].each do |metric_default_config|
               user_metric_data = metrics[metric_default_config.data['metric']] unless metrics.nil?
-              if metrics.nil? || user_metric_data.nil?
+              if metric_default_config.data['enabled'] && (metrics.nil? || user_metric_data.nil?)
                 @user_data[:metrics_configs] << metric_default_config
-              elsif user_metric_data['enabled'] == true
+              elsif !metrics.nil? && !user_metric_data.nil? && user_metric_data['enabled']
                 @user_data[:metrics_configs] << MetricConfig.new(
                   metric_default_config.data.merge(user_metric_data)
                 )

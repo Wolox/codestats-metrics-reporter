@@ -24,4 +24,5 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'rubocop'
   spec.add_dependency 'httparty'
   spec.add_dependency 's3_uploader'
+  spec.add_dependency 'oga'
 end

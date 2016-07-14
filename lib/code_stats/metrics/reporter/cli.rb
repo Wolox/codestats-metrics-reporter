@@ -42,7 +42,8 @@ module CodeStats
               name: data[:metric_name],
               value: data[:value],
               url: data[:url],
-              minimum: data[:minimum]
+              minimum: data[:minimum],
+              pull_request_number: Ci.data(config_store.ci)[:pull_request]
             }
           }
         end
