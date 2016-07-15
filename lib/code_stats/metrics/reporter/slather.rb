@@ -1,10 +1,11 @@
 require 's3_uploader'
 require 'pathname'
+require 'oga'
 
 module CodeStats
   module Metrics
     module Reporter
-      class Rubycritic
+      class Slather
         class << self
           def generate_data(metric, config_store)
             @config_store = config_store
@@ -12,7 +13,7 @@ module CodeStats
             return if upload_report? && !valid_uploader_data?
             {
               metric_name: @metric.data['name'],
-              value: generate_score_file['score'],
+              value: generate_score_file,
               url: (uploader_url if upload_report?),
               minimum: @metric.data['minimum']
             }
@@ -21,17 +22,24 @@ module CodeStats
           private
 
           def uploader_url
-            "https://s3.amazonaws.com/#{bucket}/rubycritic/#{project}/#{branch}/overview.html"
+            "https://s3.amazonaws.com/#{bucket}/slather/#{project}/#{id}/index.html"
           end
 
           def generate_score_file
             base_dir = Pathname.new(@metric.data['report_dir'])
             build_uploader.upload(File.realpath(base_dir).to_s, bucket) if upload_report?
-            json = JSON.parse(File.read(base_dir.join('report.json')))
+            html = File.read(base_dir.join('index.html'))
+            parse_coverage(html)
           end
 
           def upload_report?
             @metric.data['upload_report']
+          end
+
+          def parse_coverage(html)
+            coverage_header = Oga.parse_html(html).xpath('html/body/div/div/h4').text
+            total_coverage = coverage_header.match(/\d+.\d+/)
+            total_coverage ? total_coverage[0].to_f : 0.0
           end
 
           def valid_uploader_data?
@@ -44,7 +52,7 @@ module CodeStats
             S3Uploader::Uploader.new({
              s3_key: @metric.data['uploader_key'],
              s3_secret: @metric.data['uploader_secret'],
-             destination_dir: "rubycritic/#{project}/#{branch}",
+             destination_dir: "slather/#{project}/#{id}",
              region: @metric.data['uploader_region']
             })
           end
@@ -53,8 +61,8 @@ module CodeStats
             Ci.data(@config_store.ci)[:repository_name]
           end
 
-          def branch
-            Ci.data(@config_store.ci)[:branch]
+          def id
+            Ci.data(@config_store.ci)[:branch] || Ci.data(@config_store.ci)[:pull_request]
           end
 
           def bucket

@@ -6,25 +6,22 @@ module CodeStats
           if service == 'TRAVIS'
             {
               name:             'travis-ci',
-              branch:           ENV['TRAVIS_BRANCH'],
               build_identifier: ENV['TRAVIS_JOB_ID'],
-              pull_request:     ENV['TRAVIS_PULL_REQUEST']
+              pull_request:     ENV['TRAVIS_PULL_REQUEST'],
+              repository_name:  ENV['TRAVIS_REPO_SLUG'].split('/')[1]
             }
           elsif service == 'CIRCLECI'
             {
               name:             'circleci',
               build_identifier: ENV['CIRCLE_BUILD_NUM'],
               branch:           ENV['CIRCLE_BRANCH'],
-              commit_sha:       ENV['CIRCLE_SHA1'],
               repository_name:  ENV['CIRCLE_PROJECT_REPONAME']
             }
           elsif service == 'JENKINS_URL'
             {
               name:             'jenkins',
               build_identifier: ENV['BUILD_NUMBER'],
-              build_url:        ENV['BUILD_URL'],
-              branch:           ENV['GIT_BRANCH'],
-              commit_sha:       ENV['GIT_COMMIT']
+              branch:           ENV['GIT_BRANCH']
             }
           else
             {}
