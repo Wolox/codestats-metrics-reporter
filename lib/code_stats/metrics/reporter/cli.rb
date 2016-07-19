@@ -14,7 +14,7 @@ module CodeStats
           config_store.metrics_configs.each do |metric_config|
             puts "Processing #{metric_config.data['name']} metric"
             data = Object.const_get(
-              "CodeStats::Metrics::Reporter::#{metric_config.data['metric'].capitalize}"
+              "CodeStats::Metrics::Reporter::#{generate_class_name(metric_config)}"
             ).generate_data(metric_config, config_store)
             next if data.nil?
             report_metric(data)
@@ -25,6 +25,12 @@ module CodeStats
           puts e.message
           puts e.backtrace
           return 2
+        end
+
+        private
+
+        def generate_class_name(metric_config)
+          metric_config.data['metric'].split('_').map(&:capitalize).join
         end
 
         def report_metric(data)

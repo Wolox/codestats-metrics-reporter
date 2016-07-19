@@ -32,3 +32,8 @@ metrics:
     location: 'code-quality-report/stats.json'
     enabled: false
     minimum: 70
+  karma_coverage:
+    name: 'Code Coverage'
+    location: 'test/unit/coverage/cobertura-coverage.xml'
+    enabled: true
+    minimum: 20

@@ -3,21 +3,25 @@ require 'json'
 module CodeStats
   module Metrics
     module Reporter
-      class Escomplex
+      class KarmaCoverage
         class << self
-          MAINTAINABILITY_MAX = 171.0
           def generate_data(metric, config_store)
-            @config_store = config_store
             @metric = metric
+            @config_store = config_store
             {
               metric_name: @metric.data['name'],
+              value: parse_coverage,
               minimum: @metric.data['minimum'],
-              value: maintainability,
               url: url
             }
           end
 
           private
+
+          def parse_coverage
+            xml = File.read(@metric.data['location'])
+            Oga.parse_xml(xml).xpath('coverage')[0].get('line-rate').to_f * 100
+          end
 
           def url
             return if invalid_url_params?
@@ -45,12 +49,6 @@ module CodeStats
 
           def repository_name
             Ci.data(@config_store.ci)[:repository_name]
-          end
-
-          # Maintanibility is measured from 0 to MAINTAINABILITY_MAX. higher is better
-          def maintainability
-            json = JSON.parse(File.read(@metric.data['location']))
-            json['maintainability'] * 100 / MAINTAINABILITY_MAX
           end
         end
       end
