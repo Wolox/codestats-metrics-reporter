@@ -27,3 +27,13 @@ metrics:
     uploader_secret: <%= ENV['CODE_STATS_S3_SECRET_KEY'] %>
     uploader_region: <%= ENV['CODE_STATS_S3_REGION'] %>
     uploader_bucket: <%= ENV['CODE_STATS_S3_BUCKET'] %>
+  escomplex:
+    name: 'Js Maintainability'
+    location: 'code-quality-report/stats.json'
+    enabled: false
+    minimum: 70
+  karma_coverage:
+    name: 'Code Coverage'
+    location: 'test/unit/coverage/cobertura-coverage.xml'
+    enabled: true
+    minimum: 20
