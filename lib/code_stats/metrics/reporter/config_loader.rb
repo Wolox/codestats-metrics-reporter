@@ -28,7 +28,7 @@ module CodeStats
             return if user_file.nil?
             @user_data = @default_data.merge(user_file['config'])
             @user_data[:metrics_configs] = []
-            load_user_metrics_configs(user_file['metrics'])
+            load_user_metrics_configs(user_file['metrics']) unless user_file['metrics'].nil?
           end
 
           def load_yml_file(path)
@@ -45,17 +45,18 @@ module CodeStats
             end
           end
 
-          def load_user_metrics_configs(metrics)
+          def load_user_metrics_configs(user_metrics)
             @default_data[:metrics_configs].each do |metric_default_config|
-              user_metric_data = metrics[metric_default_config.data['metric']] unless metrics.nil?
-              if metric_default_config.data['enabled'] && (metrics.nil? || user_metric_data.nil?)
-                @user_data[:metrics_configs] << metric_default_config
-              elsif !metrics.nil? && !user_metric_data.nil? && user_metric_data['enabled']
-                @user_data[:metrics_configs] << MetricConfig.new(
-                  metric_default_config.data.merge(user_metric_data)
-                )
-              end
+              user_metric_data = user_metrics[metric_default_config.data['metric']]
+              next unless metric_enabled?(user_metric_data)
+              @user_data[:metrics_configs] << MetricConfig.new(
+                metric_default_config.data.merge(user_metric_data)
+              )
             end
+          end
+
+          def metric_enabled?(user_metric_data)
+            !user_metric_data.nil? && user_metric_data['enabled']
           end
         end
       end

@@ -1,0 +1,7 @@
+# This is the configuration used to check the rubocop source code.
+
+Documentation:
+  Enabled: false
+
+LineLength:
+  Max: 99

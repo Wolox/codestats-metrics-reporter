@@ -27,7 +27,7 @@ module CodeStats
           def generate_score_file
             base_dir = Pathname.new(@metric.data['report_dir'])
             build_uploader.upload(File.realpath(base_dir).to_s, bucket) if upload_report?
-            json = JSON.parse(File.read(base_dir.join('report.json')))
+            JSON.parse(File.read(base_dir.join('report.json')))
           end
 
           def upload_report?
@@ -41,12 +41,10 @@ module CodeStats
           end
 
           def build_uploader
-            S3Uploader::Uploader.new({
-             s3_key: @metric.data['uploader_key'],
-             s3_secret: @metric.data['uploader_secret'],
-             destination_dir: "rubycritic/#{project}/#{branch}",
-             region: @metric.data['uploader_region']
-            })
+            S3Uploader::Uploader.new(s3_key: @metric.data['uploader_key'],
+                                     s3_secret: @metric.data['uploader_secret'],
+                                     destination_dir: "rubycritic/#{project}/#{branch}",
+                                     region: @metric.data['uploader_region'])
           end
 
           def project

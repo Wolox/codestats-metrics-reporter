@@ -19,11 +19,17 @@ module CodeStats
           private
 
           def parse_coverage
-            xml = File.read(@metric.data['location'])
-            doc = Oga.parse_xml(xml)
-            missed = doc.xpath('/report/counter').map { |c| c.get('missed').to_f }.inject(0, :+)
-            covered = doc.xpath('/report/counter').map { |c| c.get('covered').to_f }.inject(0, :+)
-            covered * 100 / (missed + covered)
+            doc = Oga.parse_xml(File.read(@metric.data['location']))
+            covered = parse_covered(doc)
+            covered * 100 / (parse_missed(doc) + covered)
+          end
+
+          def parse_missed(doc)
+            doc.xpath('/report/counter').map { |c| c.get('missed').to_f }.inject(0, :+)
+          end
+
+          def parse_covered(doc)
+            doc.xpath('/report/counter').map { |c| c.get('covered').to_f }.inject(0, :+)
           end
 
           def url
@@ -33,9 +39,9 @@ module CodeStats
 
           def invalid_url_params?
             build_base_url.nil? ||
-            build_identifier.nil? ||
-            repository_name.nil? ||
-            build_report_file_url.nil?
+              build_identifier.nil? ||
+              repository_name.nil? ||
+              build_report_file_url.nil?
           end
 
           def build_base_url

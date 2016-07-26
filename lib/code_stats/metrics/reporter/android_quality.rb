@@ -5,7 +5,7 @@ module CodeStats
     module Reporter
       class AndroidQuality
         class << self
-          EXTENSIONS = ['xml', 'java']
+          EXTENSIONS = %w(xml java).freeze
 
           def generate_data(metric, config_store)
             @config_store = config_store
@@ -21,26 +21,14 @@ module CodeStats
           private
 
           def parse_quality
+            issues = parse_issues(parse_xml)
+            issues_map = add_issues_to_files(issues, initialize_issues_map)
+            average_scores(score_files(issues_map))
+          end
+
+          def parse_xml
             xml = File.read(@metric.data['location'])
-            doc = Oga.parse_xml(xml)
-            issues = parse_issues(doc)
-
-            issues_map = source_files.map { |f| { file: f, issues: [] } }
-
-            # Add issues to each file
-            issues.each do |issue|
-              source = issues_map.find { |i| i[:file] == issue[:location] }
-              source[:issues].push(issue) if source
-            end
-
-            # Give a score to each file
-            issues_map.each do |f|
-              f[:score] = f[:issues].inject(100) { |score, i| score - i[:priority]**2 }
-              f[:score] = 0 if f[:score] < 0
-            end
-
-            # Return the average of scores
-            issues_map.inject(0) { |sum, f| sum + f[:score] } / issues_map.size
+            Oga.parse_xml(xml)
           end
 
           def parse_issues(doc)
@@ -53,6 +41,33 @@ module CodeStats
                 summary: i.get('summary')
               }
             end
+          end
+
+          def initialize_issues_map
+            source_files.map { |f| { file: f, issues: [] } }
+          end
+
+          # Add issues to each file
+          def add_issues_to_files(issues, issues_map)
+            issues.each do |issue|
+              source = issues_map.find { |i| i[:file] == issue[:location] }
+              source[:issues].push(issue) if source
+            end
+            issues_map
+          end
+
+          # Give a score to each file
+          def score_files(issues_map)
+            issues_map.each do |f|
+              f[:score] = f[:issues].inject(100) { |a, e| a - e[:priority]**2 }
+              f[:score] = 0 if f[:score] < 0
+            end
+            issues_map
+          end
+
+          # Return the average of scores
+          def average_scores(issues_map)
+            issues_map.inject(0) { |a, e| a + e[:score] } / issues_map.size
           end
 
           def source_files
@@ -71,9 +86,9 @@ module CodeStats
 
           def invalid_url_params?
             build_base_url.nil? ||
-            build_identifier.nil? ||
-            repository_name.nil? ||
-            build_report_file_url.nil?
+              build_identifier.nil? ||
+              repository_name.nil? ||
+              build_report_file_url.nil?
           end
 
           def build_base_url
