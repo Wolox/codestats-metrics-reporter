@@ -49,12 +49,10 @@ module CodeStats
           end
 
           def build_uploader
-            S3Uploader::Uploader.new({
-             s3_key: @metric.data['uploader_key'],
-             s3_secret: @metric.data['uploader_secret'],
-             destination_dir: "slather/#{project}/#{id}",
-             region: @metric.data['uploader_region']
-            })
+            S3Uploader::Uploader.new(s3_key: @metric.data['uploader_key'],
+                                     s3_secret: @metric.data['uploader_secret'],
+                                     destination_dir: "slather/#{project}/#{id}",
+                                     region: @metric.data['uploader_region'])
           end
 
           def project

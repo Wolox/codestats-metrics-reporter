@@ -35,5 +35,19 @@ metrics:
   karma_coverage:
     name: 'Code Coverage'
     location: 'test/unit/coverage/cobertura-coverage.xml'
-    enabled: true
+    enabled: false
     minimum: 20
+  android_jacoco:
+    name: 'Test Coverage'
+    location: 'app/build/reports/jacoco/testStageDebugUnitTestCoverage/testStageDebugUnitTestCoverage.xml'
+    enabled: false
+    minimum: 60
+    build_base_url: ''
+    build_report_file_url: 'jacoco'
+  android_quality:
+    name: 'Code Quality'
+    location: 'app/build/outputs/lint-results.xml'
+    enabled: false
+    minimum: 70
+    build_base_url: ''
+    source_dir: 'app'

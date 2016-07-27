@@ -3,21 +3,34 @@ require 'json'
 module CodeStats
   module Metrics
     module Reporter
-      class Escomplex
+      class AndroidJacoco
         class << self
-          MAINTAINABILITY_MAX = 171.0
           def generate_data(metric, config_store)
             @config_store = config_store
             @metric = metric
             {
-              metric_name: @metric.data['name'],
-              minimum: @metric.data['minimum'],
-              value: maintainability,
+              metric_name: metric.data['name'],
+              value: parse_coverage,
+              minimum: metric.data['minimum'],
               url: url
             }
           end
 
           private
+
+          def parse_coverage
+            doc = Oga.parse_xml(File.read(@metric.data['location']))
+            covered = parse_covered(doc)
+            covered * 100 / (parse_missed(doc) + covered)
+          end
+
+          def parse_missed(doc)
+            doc.xpath('/report/counter').map { |c| c.get('missed').to_f }.inject(0, :+)
+          end
+
+          def parse_covered(doc)
+            doc.xpath('/report/counter').map { |c| c.get('covered').to_f }.inject(0, :+)
+          end
 
           def url
             return if invalid_url_params?
@@ -45,12 +58,6 @@ module CodeStats
 
           def repository_name
             Ci.data(@config_store.ci)[:repository_name]
-          end
-
-          # Maintanibility is measured from 0 to MAINTAINABILITY_MAX. higher is better
-          def maintainability
-            json = JSON.parse(File.read(@metric.data['location']))
-            json['maintainability'] * 100 / MAINTAINABILITY_MAX
           end
         end
       end

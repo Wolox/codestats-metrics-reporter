@@ -30,9 +30,9 @@ module CodeStats
 
           def invalid_url_params?
             build_base_url.nil? ||
-            build_identifier.nil? ||
-            repository_name.nil? ||
-            build_report_file_url.nil?
+              build_identifier.nil? ||
+              repository_name.nil? ||
+              build_report_file_url.nil?
           end
 
           def build_base_url

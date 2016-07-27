@@ -5,7 +5,7 @@ module CodeStats
     module Reporter
       class Simplecov
         class << self
-          def generate_data(metric, config_store)
+          def generate_data(metric, _config_store)
             json = JSON.parse(File.read('coverage/.last_run.json'))
             code_coverage = json['result']['covered_percent']
             {
