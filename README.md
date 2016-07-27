@@ -1,6 +1,8 @@
 Code Stats Metrics Reporter
 ===========================
 
+[![Gem Version](https://badge.fury.io/rb/codestats-metrics-reporter.svg)](https://badge.fury.io/rb/codestats-metrics-reporter)
+
 Ruby tasks gem to report metrics to [Code Stats](https://github.com/Wolox/codestats) from a Continous Integration service.
 
 This gem is still alpha stage and it is not pushed to [Ruby Gems](https://rubygems.org/). It include those metrics that suit [Wolox](http://wolox.co) technologies. The idea es to leave this gem as a generic interface to [Code Stats](https://github.com/Wolox/codestats) that parses metrics from a folder. So you can generate a separate gem per metric that will leave metrics in that folder. The invocation would be something like this:
