@@ -22,7 +22,7 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'rspec', '~> 3.5'
   spec.add_development_dependency 'pry', '~> 0.10'
   spec.add_development_dependency 'rubocop', '~> 0.42'
-  spec.add_dependency 'rake', '~> 0.8'
+  spec.add_dependency 'rake', '~> 0.8.7'
   spec.add_dependency 'httparty', '~> 0.13'
   spec.add_dependency 's3_uploader', '~> 0.2'
   spec.add_dependency 'oga', '~> 1.3'
