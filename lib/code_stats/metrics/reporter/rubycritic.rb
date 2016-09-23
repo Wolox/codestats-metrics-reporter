@@ -27,7 +27,8 @@ module CodeStats
           def generate_score_file
             base_dir = Pathname.new(@metric.data['report_dir'])
             build_uploader.upload(File.realpath(base_dir).to_s, bucket) if upload_report?
-            JSON.parse(File.read(base_dir.join('report.json')))
+            output = File.read(@metric.data['score_dir'])
+            /Score:\s[0-9]*\.?[0-9]+/.match(output).to_s.scan(/[0-9]*\.?[0-9]+/).first
           end
 
           def upload_report?
