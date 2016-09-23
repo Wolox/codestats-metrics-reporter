@@ -12,7 +12,7 @@ module CodeStats
             return if upload_report? && !valid_uploader_data?
             {
               metric_name: @metric.data['name'],
-              value: generate_score_file['score'],
+              value: generate_score_file,
               url: (uploader_url if upload_report?),
               minimum: @metric.data['minimum']
             }
