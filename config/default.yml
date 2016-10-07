@@ -27,6 +27,17 @@ metrics:
     uploader_secret: <%= ENV['CODE_STATS_S3_SECRET_KEY'] %>
     uploader_region: <%= ENV['CODE_STATS_S3_REGION'] %>
     uploader_bucket: <%= ENV['CODE_STATS_S3_BUCKET'] %>
+  tailor:
+    name: 'Code Quality'
+    enabled: false
+    minimum: 70
+    upload_report: true
+    location: 'tailor-report.json'
+    report_dir: 'tailor'
+    uploader_key: <%= ENV['CODE_STATS_S3_KEY'] %>
+    uploader_secret: <%= ENV['CODE_STATS_S3_SECRET_KEY'] %>
+    uploader_region: <%= ENV['CODE_STATS_S3_REGION'] %>
+    uploader_bucket: <%= ENV['CODE_STATS_S3_BUCKET'] %>
   escomplex:
     name: 'Js Maintainability'
     location: 'code-quality-report/stats.json'
