@@ -28,7 +28,7 @@ module CodeStats
             base_dir = Pathname.new(@metric.data['report_dir'])
             build_uploader.upload(File.realpath(base_dir).to_s, bucket) if upload_report?
             output = File.read(base_dir.join('overview.html'))
-            /Score:\s[0-9]*\.?[0-9]+/.match(output).to_s.scan(/[0-9]*\.?[0-9]+/).first
+            /var\sscore\s=\s[0-9]*\.?[0-9]+/.match(output).to_s.scan(/[0-9]*\.?[0-9]+/).first
           end
 
           def upload_report?
