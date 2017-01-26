@@ -6,7 +6,7 @@ module CodeStats
       class Simplecov
         class << self
           def generate_data(metric, _config_store)
-            return empty_value unless File.directory?('coverage') && File.file?('coverage/.last_run.json')
+            return empty_value(metric) unless File.directory?('coverage') && File.file?('coverage/.last_run.json')
             json = JSON.parse(File.read('coverage/.last_run.json'))
             code_coverage = json['result']['covered_percent']
             {
@@ -16,7 +16,7 @@ module CodeStats
             }
           end
 
-          def empty_value
+          def empty_value(metric)
             {
               metric_name: metric.data['name'],
               value: 0,
