@@ -38,7 +38,7 @@ module CodeStats
             name:             'bitrise',
             build_identifier: ENV['BITRISE_BUILD_NUMBER'],
             branch:           ENV['BITRISE_GIT_BRANCH'],
-            repository_name:  ENV['GIT_REPOSITORY_URL'].split('/')[4].gsub('.git','')
+            repository_name:  ENV['GIT_REPOSITORY_URL'].split('/')[1].gsub('.git','')
           }
         end
       end
