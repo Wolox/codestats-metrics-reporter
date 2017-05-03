@@ -38,7 +38,7 @@ metrics:
     uploader_region: <%= ENV['CODE_STATS_S3_REGION'] %>
     uploader_bucket: <%= ENV['CODE_STATS_S3_BUCKET'] %>
   tailor:
-    name: 'Code Quality'
+    name: 'Tailor'
     enabled: false
     minimum: 70
     upload_report: true
