@@ -22,7 +22,7 @@ metrics:
     enabled: false
     minimum: 70
     upload_report: true
-    report_dir: 'coverage'
+    report_dir: 'slather-output'
     uploader_key: <%= ENV['CODE_STATS_S3_KEY'] %>
     uploader_secret: <%= ENV['CODE_STATS_S3_SECRET_KEY'] %>
     uploader_region: <%= ENV['CODE_STATS_S3_REGION'] %>
