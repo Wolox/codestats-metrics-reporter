@@ -18,7 +18,7 @@ metrics:
     enabled: false
     minimum: 70
   slather:
-    name: 'Slather'
+    name: 'Code Coverage (Slather)'
     enabled: false
     minimum: 70
     upload_report: true
@@ -28,7 +28,7 @@ metrics:
     uploader_region: <%= ENV['CODE_STATS_S3_REGION'] %>
     uploader_bucket: <%= ENV['CODE_STATS_S3_BUCKET'] %>
   swiftlint:
-    name: 'Swiftlint'
+    name: 'Code Quality (Swiftlint)'
     enabled: false
     minimum: 70
     upload_report: true
@@ -38,7 +38,7 @@ metrics:
     uploader_region: <%= ENV['CODE_STATS_S3_REGION'] %>
     uploader_bucket: <%= ENV['CODE_STATS_S3_BUCKET'] %>
   tailor:
-    name: 'Tailor'
+    name: 'Code Quality (Tailor)'
     enabled: false
     minimum: 70
     upload_report: true
